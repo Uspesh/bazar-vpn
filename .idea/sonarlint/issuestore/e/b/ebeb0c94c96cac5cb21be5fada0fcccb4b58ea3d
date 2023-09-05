@@ -1,0 +1,6 @@
+
+spython:S116ò"VRename this field "ParseException" to match the regular expression ^[_a-z][_a-z0-9]*$.(ðò„Üúÿÿÿÿ
+mpython:S3776Ê"TRefactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed.(´ÕÕù
+Hpython:S1172¦"*Remove the unused function parameter "tz".(»Üß§ýÿÿÿÿ
+rpython:S3776¦"TRefactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed.(»Üß§ýÿÿÿÿ
+Ipython:S5806Ä"+Rename this variable; it shadows a builtin.(·…·ñøÿÿÿÿ

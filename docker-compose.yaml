@@ -1,0 +1,71 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - '6379:6379'
+
+  bot:
+    build:
+      context: .
+    env_file:
+      - .env
+    container_name: tg_bot
+    restart: always
+    volumes:
+      - /root/vpn/db.db:/vpn/db.db
+        #    command: [ '/vpn/docker/app.sh' ]
+    #- python3 /vpn/src/main.py
+    #volumes:
+    #- .:/vpn
+    #depends_on:
+    #- wireguard
+
+
+  celery:
+    build:
+      context: .
+    container_name: celery
+    command: celery -A src.background_tasks:celery worker --loglevel=INFO
+    env_file:
+      - .env
+    #    command: [ '/vpn/docker/celery.sh', 'celery' ]
+    depends_on:
+      - redis
+    links:
+      - redis
+
+  celery-beat:
+    build:
+      context: .
+    container_name: celery-beat
+    command: celery -A src.background_tasks:celery beat
+    env_file:
+      - .env
+    #    command: [ '/vpn/docker/celery.sh', 'beat' ]
+    depends_on:
+      - redis
+      - celery
+
+  flower:
+    build:
+      context: .
+    container_name: flower
+    command: celery -A src.background_tasks:celery flower
+    env_file:
+      - .env
+    #    command: [ '/vpn/docker/celery.sh', 'flower' ]
+    depends_on:
+      - redis
+      - celery
+    ports:
+      - '8888:5555'
+
+#volumes:
+#  sqlite_data:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      o: bind
+#      device: /home/neekee/PyCharm Projects/vpn/db
